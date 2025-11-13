@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ APP_NAME }}{% endblock %}</title>
+    {% if APP_CONFIG.enable_browser_debug or APP_CONFIG.debug %}
+    {% if APP_CONFIG.debug_token %}
+    <meta name="debug-token" content="{{ APP_CONFIG.debug_token }}">
+    {% endif %}
+    {% endif %}
+
+    <!-- Favicon (ICO only) -->
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='icons/favicon.ico', v=STATIC_VERSION) }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='icons/favicon.ico', v=STATIC_VERSION) }}">
+
+    <script src="{{ url_for('static', filename='js/theme-preload.js', v=STATIC_VERSION) }}"></script>
+    <!--
+        (inline theme script moved to static/js/theme-preload.js)
+        var storageKey = 'malla-theme-preference';
+        var theme = 'auto';
+            try {
+                var saved = localStorage.getItem(storageKey);
+                if (saved && ['light', 'dark', 'auto'].indexOf(saved) !== -1) {
+                    theme = saved;
+                }
+            } catch (err) {
+                theme = 'auto';
+            }
+
+            if (theme === 'auto') {
+                try {
+                    theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                } catch (err) {
+                    theme = 'light';
+                }
+            }
+
+            document.documentElement.setAttribute('data-bs-theme', theme);
+        })();
+    -->
+
+    <!-- Bootstrap CSS (vendored) -->
+    <link href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}?v={{ STATIC_VERSION }}" rel="stylesheet">
+    <!-- Bootstrap Icons (vendored) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-icons/font/bootstrap-icons.css') }}?v={{ STATIC_VERSION }}">
+
+    <!-- Plotly.js (vendored) -->
+    <script src="{{ url_for('static', filename='vendor/plotly/plotly.min.js') }}?v={{ STATIC_VERSION }}"></script>
+    <!-- Chart.js (vendored) -->
+    <script src="{{ url_for('static', filename='vendor/chart.js/chart.umd.min.js') }}?v={{ STATIC_VERSION }}"></script>
+
+    <!-- Inter Font for modern typography (left on Google Fonts) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Global 2025 theme overrides -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/malla.css', v=STATIC_VERSION) }}">
+
+    <!-- All inline styles moved to static/css/malla.css (CSP Phase 2) -->
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary site-navbar">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('main.dashboard') }}">
+                <i class="bi bi-radio"></i> {{ APP_NAME }}
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <!-- Dashboard -->
+                    <li class="nav-item">
+                        <a class="nav-link {{ 'active' if request.endpoint == 'main.dashboard' }}" href="{{ url_for('main.dashboard') }}">
+                            <i class="bi bi-speedometer2"></i> Dashboard
+                        </a>
+                    </li>
+
+                    <!-- Chat -->
+                    <li class="nav-item">
+                        <a class="nav-link {{ 'active' if request.endpoint == 'main.chat' }}" href="{{ url_for('main.chat') }}">
+                            <i class="bi bi-chat-dots"></i> Chat
+                        </a>
+                    </li>
+
+                    <!-- Packets -->
+                    <li class="nav-item">
+                        <a class="nav-link {{ 'active' if 'packet' in request.endpoint }}" href="{{ url_for('packet.packets') }}">
+                            <i class="bi bi-box"></i> Packets
+                        </a>
+                    </li>
+
+                    <!-- Nodes -->
+                    <li class="nav-item">
+                        <a class="nav-link {{ 'active' if 'node' in request.endpoint }}" href="{{ url_for('node.nodes') }}">
+                            <i class="bi bi-router"></i> Nodes
+                        </a>
+                    </li>
+
+                    <!-- Traceroutes (list) -->
+                    <li class="nav-item">
+                        <a class="nav-link {{ 'active' if request.endpoint == 'traceroute.traceroute' }}" href="{{ url_for('traceroute.traceroute') }}">
+                            <i class="bi bi-diagram-3"></i> Traceroutes
+                        </a>
+                    </li>
+
+                    <!-- Map -->
+                    <li class="nav-item">
+                        <a class="nav-link {{ 'active' if request.endpoint == 'main.map_view' }}" href="{{ url_for('main.map_view') }}">
+                            <i class="bi bi-map"></i> Map
+                        </a>
+                    </li>
+
+                    <!-- Network Graph -->
+                    <li class="nav-item">
+                        <a class="nav-link {{ 'active' if request.endpoint == 'traceroute.traceroute_graph' }}" href="{{ url_for('traceroute.traceroute_graph') }}">
+                            <i class="bi bi-diagram-2"></i> Network Graph
+                        </a>
+                    </li>
+
+                    <!-- Tools dropdown -->
+                    <li class="nav-item dropdown">
+                        {% set tools_active = request.endpoint in ['traceroute.traceroute_hops', 'gateway.gateway_compare', 'main.longest_links'] %}
+                        <a class="nav-link dropdown-toggle {{ 'active' if tools_active }}" href="#" id="toolsDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-tools"></i> Tools
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="{{ url_for('traceroute.traceroute_hops') }}">
+                                    <i class="bi bi-graph-up"></i> Hop Analysis
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ url_for('gateway.gateway_compare') }}">
+                                    <i class="bi bi-router-fill"></i> Gateway Compare
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ url_for('main.longest_links') }}">
+                                    <i class="bi bi-rulers"></i> Longest Links
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <!-- Dark Mode Toggle -->
+                <div class="navbar-nav">
+                    <button id="theme-toggle" class="btn btn-outline-light btn-sm" type="button"
+                            data-bs-toggle="tooltip" data-bs-placement="bottom"
+                            title="Toggle theme mode"
+                            aria-label="Toggle theme mode">
+                        <i class="bi bi-circle-half"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <small>Powered by <a href="https://github.com/aminovpavel/meshworks-malla" target="_blank" rel="noopener">MeshWorks Malla</a></small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS (vendored) -->
+    <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}?v={{ STATIC_VERSION }}"></script>
+    <!-- jQuery (vendored) -->
+    <script src="{{ url_for('static', filename='vendor/jquery/jquery-3.7.1.min.js') }}?v={{ STATIC_VERSION }}"></script>
+    {% if APP_CONFIG.enable_browser_debug or APP_CONFIG.debug %}
+    <script src="{{ url_for('static', filename='js/debug-client.js', v=STATIC_VERSION) }}" defer></script>
+    {% endif %}
+    <!-- URL Filter Manager (global utility) -->
+    <script src="{{ url_for('static', filename='js/url-filter-manager.js', v=STATIC_VERSION) }}"></script>
+    <!-- NodeCache utility (shared across pages) -->
+    <script src="{{ url_for('static', filename='js/node-cache.js', v=STATIC_VERSION) }}"></script>
+    <!-- Dark Mode Toggle -->
+    <script src="{{ url_for('static', filename='js/dark-mode-toggle.js', v=STATIC_VERSION) }}"></script>
+
+    <!-- Node tooltip functionality -->
+    <script src="{{ url_for('static', filename='js/node-tooltips.js', v=STATIC_VERSION) }}"></script>
+    <!--
+    <script>
+        // Cache for node information to avoid repeated API calls
+        const nodeInfoCache = new Map();
+
+        // Initialize node tooltips
+        function initializeNodeTooltips() {
+            // Initialize all node-link elements with tooltips
+            const nodeLinks = document.querySelectorAll('.node-link[data-node-id]');
+
+            nodeLinks.forEach(link => {
+                // If the node-id is 0xffffffff (the special node ID for broadcast),
+                // don't add a link and replace the text with "Broadcast".
+                if (link.getAttribute('data-node-id') === '4294967295') {
+                    link.textContent = 'Broadcast';
+                    link.style.cursor = 'default';
+                    link.style.pointerEvents = 'none';
+                    return;
+                }
+
+                const tooltip = new bootstrap.Tooltip(link, {
+                    html: true,
+                    trigger: 'hover',
+                    delay: { show: 200, hide: 100 },
+                    placement: 'top'
+                });
+
+                // Load node info on mouse enter
+                link.addEventListener('mouseenter', async () => {
+                    const nodeId = link.getAttribute('data-node-id');
+                    if (nodeId && !nodeInfoCache.has(nodeId)) {
+                        try {
+                            const nodeInfo = await fetchNodeInfo(nodeId);
+                            nodeInfoCache.set(nodeId, nodeInfo);
+                            updateTooltipContent(link, nodeInfo);
+                        } catch (error) {
+                            console.error('Error loading node info:', error);
+                            updateTooltipContent(link, { error: 'Failed to load node information' });
+                        }
+                    } else if (nodeInfoCache.has(nodeId)) {
+                        updateTooltipContent(link, nodeInfoCache.get(nodeId));
+                    }
+                });
+            });
+        }
+
+        // Fetch node information from cache first, fall back to API if necessary
+        async function fetchNodeInfo(nodeId) {
+            // Try NodeCache (populated by node-picker or preloaded)
+            if (window.NodeCache) {
+                const cachedNode = await window.NodeCache.getNode(nodeId);
+                if (cachedNode) {
+                    return cachedNode;
+                }
+            }
+
+            // Fallback to API
+            const response = await fetch(`/api/node/${nodeId}/info`);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            const data = await response.json();
+
+            // Merge into NodeCache for future lookups
+            if (window.NodeCache && (data.node || data).node_id !== undefined) {
+                window.NodeCache.addNode(data.node || data);
+            }
+            return data;
+        }
+
+        // Update tooltip content with node information
+        function updateTooltipContent(element, nodeInfo) {
+            const tooltip = bootstrap.Tooltip.getInstance(element);
+            if (!tooltip) return;
+
+            if (nodeInfo.error) {
+                tooltip.setContent({
+                    '.tooltip-inner': `<div class="node-tooltip-content">
+                        <div class="node-tooltip-header text-danger">Error</div>
+                        <div class="node-tooltip-value">${nodeInfo.error}</div>
+                    </div>`
+                });
+                return;
+            }
+
+            // Extract node data from the API response structure
+            const node = nodeInfo.node || nodeInfo;
+            const displayName = node.long_name || node.short_name || node.hex_id || 'Unknown Node';
+
+            let content = `
+                <div class="node-tooltip-content">
+                    <div class="node-tooltip-header">${displayName}</div>
+                    <div class="node-tooltip-row">
+                        <span class="node-tooltip-label">ID:</span>
+                        <span class="node-tooltip-value">${node.hex_id || 'Unknown'}</span>
+                    </div>
+            `;
+
+            if (node.hw_model) {
+                content += `
+                    <div class="node-tooltip-row">
+                        <span class="node-tooltip-label">Hardware:</span>
+                        <span class="node-tooltip-value">${node.hw_model}</span>
+                    </div>
+                `;
+            }
+
+            if (node.last_packet_str) {
+                content += `
+                    <div class="node-tooltip-row">
+                        <span class="node-tooltip-label">Last Packet:</span>
+                        <span class="node-tooltip-value">${node.last_packet_str}</span>
+                    </div>
+                `;
+            }
+
+            if (node.packet_count_24h !== undefined) {
+                content += `
+                    <div class="node-tooltip-row">
+                        <span class="node-tooltip-label">24h Packets:</span>
+                        <span class="node-tooltip-value">${node.packet_count_24h}</span>
+                    </div>
+                `;
+            }
+
+            if (node.gateway_count_24h !== undefined && node.gateway_count_24h > 0) {
+                content += `
+                    <div class="node-tooltip-row">
+                        <span class="node-tooltip-label">Heard by:</span>
+                        <span class="node-tooltip-value">${node.gateway_count_24h} gateway${node.gateway_count_24h > 1 ? 's' : ''}</span>
+                    </div>
+                `;
+            }
+
+            content += '</div>';
+
+            tooltip.setContent({
+                '.tooltip-inner': content
+            });
+        }
+
+        // Initialize tooltips when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeNodeTooltips();
+
+            // Initialize theme toggle tooltip
+            const themeToggle = document.getElementById('theme-toggle');
+            if (themeToggle) {
+                new bootstrap.Tooltip(themeToggle);
+            }
+        });
+
+        // Re-initialize tooltips when new content is loaded dynamically
+        function reinitializeTooltips() {
+            initializeNodeTooltips();
+        }
+
+        // Make reinitializeTooltips available globally for dynamic content
+        window.reinitializeTooltips = reinitializeTooltips;
+    </script>
+    -->
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

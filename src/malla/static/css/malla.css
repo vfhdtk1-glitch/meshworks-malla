@@ -1,0 +1,813 @@
+/* Malla Bootstrap Theme */
+/* Leverages Bootstrap 5's CSS custom property system for maximum compatibility */
+
+/* Import Inter font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* Bootstrap theme customization using native CSS custom properties */
+:root,
+[data-bs-theme=light] {
+  /* Typography - Bootstrap native approach */
+  --bs-font-sans-serif: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --bs-body-font-family: var(--bs-font-sans-serif);
+  --bs-body-font-weight: 400;
+  --bs-headings-font-weight: 500;
+
+  /* Enhanced color palette - Bootstrap native */
+  --bs-primary: #618500;
+  --bs-primary-rgb: 97, 133, 0;
+  --bs-secondary: #6c757d;
+  --bs-success: #198754;
+  --bs-info: #0dcaf0;
+  --bs-warning: #ffc107;
+  --bs-danger: #dc3545;
+  --bs-dark: #212529;
+  --bs-light: #f8f9fa;
+
+  /* Custom colors for specific roles */
+  --bs-sensor: #e83e8c;
+
+  /* Surface colors with better contrast */
+  --bs-body-bg: #fafbfc;
+  --bs-body-bg-rgb: 250, 251, 252;
+  --bs-body-color: #212529;
+  --bs-body-color-rgb: 33, 37, 41;
+  --bs-tertiary-bg: #f8f9fa;
+  --bs-tertiary-bg-rgb: 248, 249, 250;
+  --bs-secondary-bg: #e9ecef;
+  --bs-secondary-color: #6c757d;
+
+  /* Border colors */
+  --bs-border-color: #dee2e6;
+  --bs-border-color-translucent: rgba(0, 0, 0, 0.175);
+
+  /* Modern border radius */
+  --bs-border-radius: 0.5rem;
+  --bs-border-radius-sm: 0.375rem;
+  --bs-border-radius-lg: 0.75rem;
+  --bs-border-radius-xl: 1rem;
+
+  /* Enhanced shadows using Bootstrap system */
+  --bs-box-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  --bs-box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07), 0 1px 3px rgba(0, 0, 0, 0.1);
+  --bs-box-shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1), 0 4px 10px rgba(0, 0, 0, 0.05);
+
+  /* Table theming - Bootstrap native */
+  --bs-table-hover-bg: rgba(var(--bs-primary-rgb), 0.025);
+  --bs-table-striped-bg: rgba(var(--bs-primary-rgb), 0.015);
+
+  /* Transition system */
+  --bs-transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced body typography */
+html body {
+  font-family: var(--bs-font-sans-serif) !important;
+  font-weight: var(--bs-body-font-weight);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Headings with appropriate weights */
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-weight: var(--bs-headings-font-weight);
+}
+
+h1, .h1 {
+  font-weight: 600;
+}
+
+/* Bootstrap component enhancements */
+
+/* Cards with modern elevation */
+.card {
+  border: 1px solid var(--bs-border-color);
+  box-shadow: var(--bs-box-shadow-sm);
+  transition: var(--bs-transition);
+}
+
+.card:hover {
+  box-shadow: var(--bs-box-shadow);
+  transform: translateY(-1px);
+}
+
+/* Tables - Compact and modern */
+.table {
+  --bs-table-hover-bg: rgba(var(--bs-primary-rgb), 0.025);
+  font-size: 0.875rem;
+}
+
+.table > :not(caption) > * > * {
+  border-bottom-width: 1px;
+  border-color: var(--bs-border-color);
+  padding: 0.5rem;
+}
+
+.table thead th {
+  background: var(--bs-primary);
+  color: white;
+  font-weight: 500;
+  border: none;
+  padding: 0.6rem 0.5rem;
+  font-size: 0.8rem;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  transition: background-color 0.2s ease;
+}
+
+.table thead th:hover {
+  background: color-mix(in srgb, var(--bs-primary) 85%, black);
+}
+
+/* Buttons with enhanced states */
+.btn {
+  font-weight: 400;
+  transition: var(--bs-transition);
+  border-radius: var(--bs-border-radius);
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--bs-box-shadow);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+/* Form controls */
+.form-control,
+.form-select {
+  border-radius: var(--bs-border-radius-sm);
+  border: 1px solid var(--bs-border-color);
+  transition: var(--bs-transition);
+  font-weight: 400;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--bs-primary);
+  box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.15);
+}
+
+/* Navigation */
+.navbar {
+  box-shadow: var(--bs-box-shadow-sm);
+  backdrop-filter: blur(10px);
+}
+
+/* Keep navbar above dropdowns/offcanvas consistently without inline styles */
+.site-navbar {
+  z-index: 1040;
+}
+
+.nav-link {
+  font-weight: 400;
+  transition: var(--bs-transition);
+}
+
+.navbar-brand {
+  font-weight: 500;
+}
+
+/* Modern scrollbar styling */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--bs-secondary) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--bs-secondary);
+  border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--bs-primary);
+}
+
+/* Dark mode support - Bootstrap native */
+[data-bs-theme=dark] {
+  --bs-body-bg: #212529;
+  --bs-body-bg-rgb: 33, 37, 41;
+  --bs-body-color: #dee2e6;
+  --bs-body-color-rgb: 222, 226, 230;
+  --bs-tertiary-bg: #2b3035;
+  --bs-tertiary-bg-rgb: 43, 48, 53;
+  --bs-secondary-bg: #343a40;
+  --bs-secondary-color: #adb5bd;
+
+  /* Border colors for dark mode */
+  --bs-border-color: #495057;
+  --bs-border-color-translucent: rgba(255, 255, 255, 0.15);
+
+  /* Dark/light color variants for dark mode */
+  --bs-dark: #f8f9fa;
+  --bs-light: #495057;
+
+  /* Custom colors for dark mode */
+  --bs-sensor: #f8a2c2;
+}
+
+[data-bs-theme=dark] .card {
+  background-color: var(--bs-tertiary-bg);
+  border-color: var(--bs-border-color);
+}
+
+[data-bs-theme=dark] .card:hover {
+  background-color: var(--bs-secondary-bg);
+}
+
+[data-bs-theme=dark] .tooltip-inner {
+  --bs-tooltip-color: var(--bs-body-color);
+  --bs-tooltip-bg: var(--bs-tertiary-bg);
+}
+
+/* Application-specific components using Bootstrap utilities */
+
+/* Modern table container - using Bootstrap classes where possible */
+.modern-table-container {
+  background: var(--bs-body-bg);
+  border-radius: var(--bs-border-radius);
+  box-shadow: var(--bs-box-shadow);
+  overflow: hidden;
+}
+
+.modern-table thead th {
+  background: var(--bs-primary);
+  color: white;
+  font-weight: 500;
+  padding: 0.6rem 0.5rem;
+  font-size: 0.8rem;
+  border: none;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  transition: background-color 0.2s ease;
+}
+
+.modern-table thead th:hover {
+  background: color-mix(in srgb, var(--bs-primary) 85%, black);
+}
+
+/* Sorting CSS moved to modern-table.css to avoid conflicts */
+
+.modern-table tbody tr {
+  transition: var(--bs-transition);
+}
+
+.modern-table tbody tr:hover {
+  background-color: var(--bs-table-hover-bg);
+  transition: background-color 0.2s ease;
+}
+
+.modern-table tbody tr:nth-of-type(odd) {
+  background-color: var(--bs-table-striped-bg);
+}
+
+.modern-table tbody td {
+  padding: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.3;
+}
+
+/* Form elements in tables */
+.modern-table .form-control,
+.modern-table .form-select {
+  border-radius: var(--bs-border-radius-sm);
+  border: 1px solid var(--bs-border-color);
+}
+
+/* Badge styling in tables - smaller for compact design */
+.modern-table .badge {
+  font-size: 0.7em;
+  font-weight: 500;
+  padding: 0.25em 0.5em;
+}
+
+/* Link styling in tables */
+.modern-table a {
+  color: var(--bs-primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.modern-table a:hover {
+  color: var(--bs-primary);
+  filter: brightness(1.2);
+  text-decoration: underline;
+}
+
+/* Compact button groups in tables */
+.modern-table .btn-group .btn {
+  padding: 0.2rem 0.4rem;
+  font-size: 0.75rem;
+}
+
+/* Sidebar components - using Bootstrap design tokens */
+.table-sidebar {
+  background: var(--bs-body-bg);
+  border-right: 1px solid var(--bs-border-color);
+  box-shadow: var(--bs-box-shadow);
+}
+
+.modern-filters-card {
+  background: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: var(--bs-border-radius);
+  box-shadow: var(--bs-box-shadow-sm);
+}
+
+/* Enhanced focus states using Bootstrap system */
+.btn:focus-visible,
+.form-control:focus,
+.form-select:focus {
+  outline: 2px solid var(--bs-primary);
+  outline-offset: 2px;
+}
+
+/* Responsive typography using Bootstrap approach */
+@media (min-width: 768px) {
+  html {
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  html {
+    font-size: 1.05rem;
+  }
+}
+
+/* Mobile responsiveness for tables */
+@media (max-width: 768px) {
+  .modern-table {
+    font-size: 0.8rem; /* Even smaller on mobile */
+  }
+
+  .modern-table thead th,
+  .modern-table tbody td {
+    padding: 0.4rem 0.3rem; /* Very compact on mobile */
+  }
+}
+
+/* Animation utilities - Bootstrap compatible */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Print styles - Bootstrap compatible */
+@media print {
+  .table-sidebar,
+  .btn,
+  .navbar {
+    display: none !important;
+  }
+
+  .modern-table-container {
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+}
+
+/* Dark mode adjustments for tables */
+[data-bs-theme=dark] .modern-table-container,
+[data-bs-theme=dark] .modern-filters-card {
+  background: var(--bs-tertiary-bg);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+[data-bs-theme=dark] .modern-table tbody tr:nth-of-type(odd) {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+[data-bs-theme=dark] .modern-table tbody tr:hover {
+  background-color: rgba(var(--bs-primary-rgb), 0.15);
+}
+
+/* Bootstrap utility class overrides for dark mode */
+[data-bs-theme=dark] .bg-light {
+  background-color: var(--bs-tertiary-bg) !important;
+  color: var(--bs-body-color) !important;
+}
+
+[data-bs-theme=dark] .text-dark {
+  color: var(--bs-body-color) !important;
+}
+
+/* Card with bg-light override */
+[data-bs-theme=dark] .card.bg-light {
+  background-color: var(--bs-tertiary-bg) !important;
+  border-color: var(--bs-border-color) !important;
+  color: var(--bs-body-color) !important;
+}
+
+/* Badge with bg-light override - make it more visible in dark mode */
+[data-bs-theme=dark] .badge.bg-light {
+  background-color: var(--bs-secondary-bg) !important;
+  color: var(--bs-body-color) !important;
+  border: 1px solid var(--bs-border-color);
+}
+
+/* Ensure text contrast for warning badges in dark mode */
+[data-bs-theme=dark] .badge.bg-warning {
+  color: var(--bs-dark) !important;
+  background-color: rgb(189, 142, 0) !important;
+}
+
+[data-bs-theme=dark] .badge.bg-info {
+  color: var(--bs-dark) !important;
+  background-color: rgb(0, 145, 174) !important;
+}
+
+/* Table layout overrides for dark mode */
+[data-bs-theme=dark] .table-header {
+  background: var(--bs-body-bg) !important;
+  border-bottom-color: var(--bs-border-color) !important;
+  color: var(--bs-body-color) !important;
+}
+
+[data-bs-theme=dark] .table-content {
+  background: var(--bs-body-bg) !important;
+  color: var(--bs-body-color) !important;
+}
+
+[data-bs-theme=dark] .table-container {
+  background: var(--bs-tertiary-bg) !important;
+}
+
+[data-bs-theme=dark] .table-sidebar {
+  background: var(--bs-body-bg) !important;
+  border-left-color: var(--bs-border-color) !important;
+  color: var(--bs-body-color) !important;
+}
+
+[data-bs-theme=dark] .sidebar-header {
+  background: var(--bs-tertiary-bg) !important;
+  border-bottom-color: var(--bs-border-color) !important;
+  color: var(--bs-body-color) !important;
+}
+
+[data-bs-theme=dark] .sidebar-section {
+  border-bottom-color: var(--bs-border-color) !important;
+}
+
+[data-bs-theme=dark] .sidebar-section h6 {
+  color: var(--bs-body-color) !important;
+}
+
+[data-bs-theme=dark] .table-sidebar.collapsed ~ .table-main #toggleSidebar {
+  background: var(--bs-body-bg) !important;
+  border-color: var(--bs-border-color) !important;
+  color: var(--bs-body-color) !important;
+  box-shadow: var(--bs-box-shadow) !important;
+}
+
+[data-bs-theme=dark] .modern-table-pagination {
+  background: var(--bs-tertiary-bg) !important;
+  border-top-color: var(--bs-border-color) !important;
+}
+
+/* Table info styling for dark mode - use darker background for better readability */
+[data-bs-theme=dark] .table-info {
+  --bs-table-striped-bg: var(--bs-border-color) !important;
+}
+
+/* Metric label styling for dark mode - make it lighter and more visible */
+[data-bs-theme=dark] .metric-label {
+  color: var(--bs-secondary-color) !important;
+}
+
+/* Gateway selector card dark mode support */
+[data-bs-theme=dark] .gateway-selector {
+  background: var(--bs-tertiary-bg) !important;
+  color: var(--bs-body-color) !important;
+}
+
+/* Node selector card dark mode support */
+[data-bs-theme=dark] .node-selector {
+  background: var(--bs-tertiary-bg) !important;
+  color: var(--bs-body-color) !important;
+}
+
+/* Graph container dark mode support */
+[data-bs-theme=dark] .graph-container {
+  background: var(--bs-tertiary-bg) !important;
+}
+
+/* Shared sidebar dark mode support */
+[data-bs-theme=dark] .sidebar {
+  background: var(--bs-body-bg) !important;
+  border-left-color: var(--bs-border-color) !important;
+  color: var(--bs-body-color) !important;
+}
+
+[data-bs-theme=dark] .sidebar.collapsed #toggleSidebar {
+  background: var(--bs-body-bg) !important;
+  border-color: var(--bs-border-color) !important;
+  color: var(--bs-body-color) !important;
+  box-shadow: var(--bs-box-shadow) !important;
+}
+
+/* Traceroute graph container dark mode support */
+[data-bs-theme=dark] .traceroute-graph-container {
+  background: var(--bs-body-bg) !important;
+}
+
+/* Loading and error overlays for dark mode */
+[data-bs-theme=dark] .loading-overlay,
+[data-bs-theme=dark] .error-overlay {
+  background: rgba(var(--bs-tertiary-bg-rgb), 0.9) !important;
+  color: var(--bs-body-color) !important;
+}
+
+[data-bs-theme=dark] .error-overlay {
+  color: var(--bs-danger) !important;
+}
+
+/* Node labels in graphs for dark mode */
+[data-bs-theme=dark] .node-label {
+  fill: var(--bs-body-color) !important;
+}
+
+/* Node list item styling for dark mode */
+[data-bs-theme=dark] .node-list-item,
+[data-bs-theme=dark] .search-result-item {
+  border-color: var(--bs-border-color) !important;
+  color: var(--bs-body-color) !important;
+}
+
+[data-bs-theme=dark] .node-list-item:hover,
+[data-bs-theme=dark] .search-result-item:hover {
+  background-color: var(--bs-tertiary-bg) !important;
+}
+
+[data-bs-theme=dark] .node-list-item.selected,
+[data-bs-theme=dark] .search-result-item.selected {
+  background-color: rgba(var(--bs-primary-rgb), 0.2) !important;
+  border-color: var(--bs-primary) !important;
+}
+
+/* Leaflet map dark mode support */
+[data-bs-theme=dark] .leaflet-popup-content-wrapper,
+[data-bs-theme=dark] .leaflet-popup-tip {
+  background: var(--bs-body-bg) !important;
+  color: var(--bs-body-color) !important;
+}
+
+[data-bs-theme=dark] .leaflet-control-layers,
+[data-bs-theme=dark] .leaflet-control-zoom a,
+[data-bs-theme=dark] .leaflet-control-attribution {
+  background: var(--bs-body-bg) !important;
+  color: var(--bs-body-color) !important;
+  border-color: var(--bs-border-color) !important;
+}
+
+[data-bs-theme=dark] .leaflet-control-zoom a:hover {
+  background: var(--bs-tertiary-bg) !important;
+}
+
+/* Marker cluster styling for dark mode */
+[data-bs-theme=dark] .marker-cluster-small,
+[data-bs-theme=dark] .marker-cluster-medium,
+[data-bs-theme=dark] .marker-cluster-large {
+  background-color: rgba(var(--bs-primary-rgb), 0.8) !important;
+}
+
+[data-bs-theme=dark] .marker-cluster-small div,
+[data-bs-theme=dark] .marker-cluster-medium div,
+[data-bs-theme=dark] .marker-cluster-large div {
+  background-color: rgba(var(--bs-primary-rgb), 0.9) !important;
+  color: white !important;
+}
+
+/* Utility classes following Bootstrap naming conventions */
+.shadow-modern {
+  box-shadow: var(--bs-box-shadow) !important;
+}
+
+.shadow-modern-sm {
+  box-shadow: var(--bs-box-shadow-sm) !important;
+}
+
+.shadow-modern-lg {
+  box-shadow: var(--bs-box-shadow-lg) !important;
+}
+
+.rounded-modern {
+  border-radius: var(--bs-border-radius) !important;
+}
+
+.rounded-modern-lg {
+  border-radius: var(--bs-border-radius-lg) !important;
+}
+
+/* Signal quality indicators using Bootstrap color system */
+.signal-excellent {
+  color: var(--bs-success) !important;
+}
+
+.signal-good {
+  color: var(--bs-info) !important;
+}
+
+.signal-fair {
+  color: var(--bs-warning) !important;
+}
+
+.signal-poor {
+  color: var(--bs-danger) !important;
+}
+
+/* Signal quality indicators with background colors for light mode */
+.signal-excellent {
+  background-color: #d4edda !important;
+  color: #155724 !important;
+}
+
+.signal-good {
+  background-color: #fff3cd !important;
+  color: #856404 !important;
+}
+
+.signal-fair {
+  background-color: #f8d7da !important;
+  color: #721c24 !important;
+}
+
+.signal-poor {
+  background-color: #f5c6cb !important;
+  color: #721c24 !important;
+}
+
+/* Dark mode signal quality indicators - adjusted colors for better contrast on dark backgrounds */
+[data-bs-theme=dark] .signal-excellent {
+  background-color: #0f5132 !important;
+  color: #75b798 !important;
+}
+
+[data-bs-theme=dark] .signal-good {
+  background-color: #664d03 !important;
+  color: #ffda6a !important;
+}
+
+[data-bs-theme=dark] .signal-fair {
+  background-color: #58151c !important;
+  color: #f1aeb5 !important;
+}
+
+[data-bs-theme=dark] .signal-poor {
+  background-color: #58151c !important;
+  color: #f5c2c7 !important;
+}
+
+/* Dark mode toggle button styling */
+#theme-toggle {
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: var(--bs-transition);
+  margin-left: 0.5rem;
+}
+
+#theme-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px);
+}
+
+#theme-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25);
+}
+
+#theme-toggle i {
+  font-size: 0.9rem;
+  transition: var(--bs-transition);
+}
+
+/* Dark mode specific adjustments for toggle button */
+[data-bs-theme=dark] #theme-toggle {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-bs-theme=dark] #theme-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Legend line styles for traceroute graph */
+.legend-line {
+  width: 18px;
+  height: 3px;
+  margin-right: 8px;
+  display: inline-block;
+}
+
+.legend-rf-link {
+  background: var(--bs-primary);
+}
+
+.legend-gateway-connection {
+  height: 2px;
+  background: var(--bs-info);
+  border-top: 1px dashed var(--bs-info);
+}
+
+.legend-direct-reception {
+  height: 2px;
+  background: var(--bs-warning);
+  border-top: 1px dashed var(--bs-warning);
+}
+
+/* Map hop count label */
+.map-hop-count-label {
+  background: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 3px;
+  padding: 2px 4px;
+  font-size: 10px;
+  font-weight: bold;
+  color: var(--bs-body-color);
+  box-shadow: var(--bs-box-shadow-sm);
+}
+
+/* Payload hex and YAML content styling for dark mode */
+[data-bs-theme=dark] .payload-hex {
+  background-color: var(--bs-tertiary-bg) !important;
+  color: var(--bs-body-color) !important;
+  border: 1px solid var(--bs-border-color);
+}
+
+[data-bs-theme=dark] .yaml-content {
+  background-color: var(--bs-tertiary-bg) !important;
+  color: var(--bs-body-color) !important;
+  border: 1px solid var(--bs-border-color);
+}
+
+/* Stats card styling for dark mode */
+[data-bs-theme=dark] .stats-card {
+  background-color: var(--bs-tertiary-bg) !important;
+  border-color: var(--bs-border-color) !important;
+  color: var(--bs-body-color) !important;
+}
+
+/* Stat label and value styling for dark mode */
+[data-bs-theme=dark] .stat-label {
+  color: var(--bs-secondary-color) !important;
+}
+
+[data-bs-theme=dark] .stat-value {
+  color: var(--bs-body-color) !important;
+}
+
+/* Diff classes styling for dark mode - maintain colors for visual distinction */
+[data-bs-theme=dark] .positive-diff {
+  color: #198754 !important; /* Keep green for positive values */
+}
+
+[data-bs-theme=dark] .negative-diff {
+  color: #dc3545 !important; /* Keep red for negative values */
+}
+
+[data-bs-theme=dark] .neutral-diff {
+  color: #6c757d !important; /* Keep gray for neutral values */
+}
+.navbar-brand { font-weight: bold; }
+.card-metric { text-align: center; padding: 1.5rem; }
+.metric-value { font-size: 2rem; font-weight: bold; color: #0d6efd; }
+.metric-label { color: #6c757d; font-size: 0.9rem; }
+.signal-excellent { color: #198754; }
+.signal-good { color: #ffc107; }
+.signal-fair { color: #fd7e14; }
+.signal-poor { color: #dc3545; }
+.table-responsive { max-height: 70vh; }
+.footer { margin-top: 3rem; padding: 2rem 0; border-top: 1px solid #dee2e6; color: #6c757d; text-align: center; }
+.node-link { position: relative; color: #0d6efd; font-weight: 500; }
+.node-link:hover { color: #0a58ca; }
+.tooltip.bs-tooltip-top .tooltip-inner,
+.tooltip.bs-tooltip-bottom .tooltip-inner { max-width: 300px; text-align: left; background-color: #212529; border-radius: 0.375rem; padding: 0.75rem; }
+.node-tooltip-content { font-size: 0.875rem; line-height: 1.4; }
+.node-tooltip-header { font-weight: bold; margin-bottom: 0.5rem; color: #fff; }
+.node-tooltip-row { margin-bottom: 0.25rem; }
+.node-tooltip-label { color: #adb5bd; font-weight: 500; }
+.node-tooltip-value { color: #fff; }
+.table-responsive { height: 100%; max-height: 100%; }

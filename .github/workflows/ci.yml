@@ -1,0 +1,82 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  pr-checks:
+    name: PR Checks (Python)
+    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install uv
+        run: |
+          curl -Ls https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Sync dependencies (dev)
+        env:
+          UV_PYTHON_PREFERENCE: only-system
+        run: uv sync --dev
+
+      - name: Sanity smoke
+        run: make sanity
+
+      - name: Lint (ruff)
+        run: uv run ruff check src tests
+
+      - name: Type check (basedpyright)
+        run: uv run basedpyright src
+
+      - name: Unit tests (exclude e2e/integration/slow)
+        env:
+          PYTEST_ADDOPTS: -m "not e2e and not integration and not slow"
+        run: uv run pytest -n auto -k "not e2e and not integration" --tb=short --durations=10 --maxfail=5
+
+  nix-ci:
+    name: Full CI (Nix shell)
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: nixbuild/nix-quick-install-action@v30
+        with:
+          nix_conf: |
+            keep-env-derivations = true
+            keep-outputs = true
+
+      - name: Restore and save Nix store
+        uses: nix-community/cache-nix-action@v6
+        with:
+          primary-key: nix-${{ runner.os }}-${{ hashFiles('**/*.nix', '**/flake.lock') }}
+          restore-prefixes-first-match: nix-${{ runner.os }}-
+          gc-max-store-size-linux: 1G
+          purge: true
+          purge-prefixes: nix-${{ runner.os }}-
+          purge-created: 0
+          purge-last-accessed: 0
+          purge-primary-key: never
+
+      - name: Install project dependencies (including dev)
+        run: nix develop --command make install-dev
+
+      - name: Run linting
+        run: nix develop --command make lint
+
+      - name: Run tests (all markers)
+        run: nix develop --command uv run pytest -n auto --tb=line --no-header --quiet
