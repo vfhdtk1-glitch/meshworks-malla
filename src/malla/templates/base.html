@@ -151,6 +151,18 @@
                     </li>
                 </ul>
 
+                <!-- Language Selector -->
+                <div class="navbar-nav me-2">
+                    <div class="dropdown">
+                        <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-translate"></i> <span id="currentLanguage">RU</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+                            <li><a class="dropdown-item" href="#" data-lang="ru">Русский</a></li>
+                        </ul>
+                    </div>
+                </div>
+
                 <!-- Dark Mode Toggle -->
                 <div class="navbar-nav">
                     <button id="theme-toggle" class="btn btn-outline-light btn-sm" type="button"
@@ -193,6 +205,8 @@
     <script src="{{ url_for('static', filename='js/node-cache.js', v=STATIC_VERSION) }}"></script>
     <!-- Dark Mode Toggle -->
     <script src="{{ url_for('static', filename='js/dark-mode-toggle.js', v=STATIC_VERSION) }}"></script>
+    <!-- Internationalization -->
+    <script src="{{ url_for('static', filename='js/i18n.js', v=STATIC_VERSION) }}"></script>
 
     <!-- Node tooltip functionality -->
     <script src="{{ url_for('static', filename='js/node-tooltips.js', v=STATIC_VERSION) }}"></script>
@@ -359,5 +373,34 @@
     -->
 
     {% block extra_js %}{% endblock %}
+    
+    <script>
+    // Language switching functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        // Language selector dropdown items
+        const languageItems = document.querySelectorAll('[data-lang]');
+        
+        languageItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const lang = this.getAttribute('data-lang');
+                
+                // Set the language in our i18n system
+                if (window.I18n && window.I18n.setLanguage) {
+                    window.I18n.setLanguage(lang);
+                    
+                    // Update the displayed language
+                    const currentLanguageElement = document.getElementById('currentLanguage');
+                    if (currentLanguageElement) {
+                        currentLanguageElement.textContent = lang.toUpperCase();
+                    }
+                    
+                    // Re-apply translations
+                    window.I18n.applyTranslations();
+                }
+            });
+        });
+    });
+    </script>
 </body>
 </html>

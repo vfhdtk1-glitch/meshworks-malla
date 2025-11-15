@@ -19,7 +19,7 @@
 
     <div class="row mb-4">
         <div class="col">
-            <h1 class="h2">Mesh Metrics</h1>
+            <h1 class="h2" data-i18n="Mesh Metrics">Mesh Metrics</h1>
         </div>
     </div>
 
@@ -90,7 +90,7 @@
         <div class="col-md-8 mb-4">
             <div class="card h-100">
                 <div class="card-header">
-                    <h5 class="card-title mb-0"><i class="bi bi-graph-up-arrow"></i> Network Activity Trends (7 Days)</h5>
+                    <h5 class="card-title mb-0"><i class="bi bi-graph-up-arrow"></i> <span data-i18n="Network Activity Trends (7 Days)">Network Activity Trends (7 Days)</span></h5>
                 </div>
                 <div class="card-body">
                     <div id="timeSeriesChartLoading" class="text-center py-4">
@@ -108,7 +108,7 @@
         <div class="col-md-4 mb-4">
             <div class="card h-100">
                 <div class="card-header">
-                    <h5 class="card-title mb-0"><i class="bi bi-activity"></i> Network Health</h5>
+                    <h5 class="card-title mb-0"><i class="bi bi-activity"></i> <span data-i18n="Network Health">Network Health</span></h5>
                 </div>
                 <div class="card-body">
                     <div class="mb-3">
@@ -171,7 +171,7 @@
         <div class="col-md-4 mb-4">
             <div class="card h-100">
                 <div class="card-header">
-                    <h5 class="card-title mb-0"><i class="bi bi-people"></i> Node Activity Distribution</h5>
+                    <h5 class="card-title mb-0"><i class="bi bi-people"></i> <span data-i18n="Node Activity Distribution">Node Activity Distribution</span></h5>
                 </div>
                 <div class="card-body">
                     <div id="nodeActivityChartLoading" class="text-center py-4">
@@ -188,7 +188,7 @@
         <div class="col-md-4 mb-4">
             <div class="card h-100">
                 <div class="card-header">
-                    <h5 class="card-title mb-0"><i class="bi bi-router-fill"></i> Gateway Activity Distribution</h5>
+                    <h5 class="card-title mb-0"><i class="bi bi-router-fill"></i> <span data-i18n="Gateway Activity Distribution">Gateway Activity Distribution</span></h5>
                 </div>
                 <div class="card-body">
                     <div id="gatewayActivityChartLoading" class="text-center py-4">
@@ -205,7 +205,7 @@
         <div class="col-md-4 mb-4">
             <div class="card h-100">
                 <div class="card-header">
-                    <h5 class="card-title mb-0"><i class="bi bi-reception-4"></i> Signal Quality Distribution</h5>
+                    <h5 class="card-title mb-0"><i class="bi bi-reception-4"></i> <span data-i18n="Signal Quality Distribution">Signal Quality Distribution</span></h5>
                 </div>
                 <div class="card-body">
                     <div id="signalDistributionChartLoading" class="text-center py-4">
@@ -225,7 +225,7 @@
         <div class="col-md-6 mb-4">
             <div class="card h-100">
                 <div class="card-header">
-                    <h5 class="card-title mb-0"><i class="bi bi-router"></i> Message Routing Patterns</h5>
+                    <h5 class="card-title mb-0"><i class="bi bi-router"></i> <span data-i18n="Message Routing Patterns">Message Routing Patterns</span></h5>
                 </div>
                 <div class="card-body">
                     <div id="hopDistributionChartLoading" class="text-center py-4">
@@ -242,7 +242,7 @@
         <div class="col-md-6 mb-4">
             <div class="card h-100">
                 <div class="card-header">
-                    <h5 class="card-title mb-0"><i class="bi bi-pie-chart"></i> Protocol Usage (24h)</h5>
+                    <h5 class="card-title mb-0"><i class="bi bi-pie-chart"></i> <span data-i18n="Protocol Usage (24h)">Protocol Usage (24h)</span></h5>
                 </div>
                 <div class="card-body">
                     {% if stats.packet_types %}
@@ -268,7 +268,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title mb-0"><i class="bi bi-trophy"></i> Most Active Nodes</h5>
+                    <h5 class="card-title mb-0"><i class="bi bi-trophy"></i> <span data-i18n="Most Active Nodes">Most Active Nodes</span></h5>
                 </div>
                 <div class="card-body">
                     <div id="topNodesLoading" class="text-center py-4">
@@ -508,7 +508,7 @@ async function loadAnalyticsData() {
         // Render all charts and tables with loaded data
         createTimeSeriesChart(analyticsData.temporal_patterns);
         createNodeActivityChart(analyticsData.node_statistics);
-        createGatewayActivityChart(analyticsData.gateway_distribution);
+        await createGatewayActivityChart(analyticsData.gateway_distribution);
         createSignalDistributionChart(analyticsData.signal_quality);
         createHopDistributionChart(analyticsData.temporal_patterns);
         createPacketTypesChart(analyticsData.packet_types);
@@ -622,7 +622,10 @@ function createGatewayActivityChart(gatewayData) {
 
     // Take top 10 gateways by packet count
     const topGateways = gatewayData.slice(0, 10);
-    const labels = topGateways.map(g => g.gateway_id || 'Unknown');
+    
+    // Use gateway names from the backend
+    const labels = topGateways.map(g => g.gateway_name || g.gateway_id || 'Unknown');
+    
     const data = topGateways.map(g => g.total_packets || 0);
 
     const colors = getChartColors();
