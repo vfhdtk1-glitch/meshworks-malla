@@ -72,6 +72,15 @@
             'Never': 'Никогда',
             'Unknown': 'Неизвестно',
             'Unnamed': 'Без имени'
+,
+            
+            // Packets
+            'Packets': 'Пакеты',
+            'Packet Filters': 'Фильтры пакетов',
+            
+            // Traceroute
+            'Traceroute Analysis': 'Анализ трассировок',
+            'Traceroute Filters': 'Фильтры трассировок'
         }
     };
 
