@@ -8,7 +8,7 @@ from collections import defaultdict
 from typing import Any
 
 from ..database.repositories import NodeRepository
-from ..utils.node_utils import get_bulk_node_names
+from ..utils.node_utils import get_bulk_node_short_names
 
 logger = logging.getLogger(__name__)
 
@@ -532,16 +532,16 @@ class AnalyticsService:
                 except ValueError:
                     pass  # Skip invalid formats
 
-        # Get node names for gateway IDs
-        node_names = get_bulk_node_names(gateway_node_ids) if gateway_node_ids else {}
+        # Get node short names for gateway IDs
+        node_short_names = get_bulk_node_short_names(gateway_node_ids) if gateway_node_ids else {}
 
-        # Add node names to gateway stats
+        # Add node short names to gateway stats
         for stat in gateway_stats:
             gateway_id = stat["gateway_id"]
             if gateway_id and gateway_id.startswith("!"):
                 try:
                     node_id = int(gateway_id[1:], 16)
-                    stat["gateway_name"] = node_names.get(node_id, gateway_id)
+                    stat["gateway_name"] = node_short_names.get(node_id, gateway_id)
                 except ValueError:
                     stat["gateway_name"] = gateway_id
             else:
