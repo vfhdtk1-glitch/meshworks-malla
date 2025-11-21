@@ -12,37 +12,37 @@
 <!-- Override the base template's container to make this page full-width/full-height -->
 </div> <!-- Close the base template's container -->
 
-{% call fullscreen_table_container("nodesTable", 'Network Nodes', "bi bi-diagram-3", "toggleSidebar", "Network Nodes") %}
+{% call fullscreen_table_container("nodesTable", "Network Nodes", "bi bi-diagram-3", "toggleSidebar") %}
     <!-- Main table content -->
     <div id="nodesTable" class="modern-table-container"></div>
 {% endcall %}
 
 <!-- Sidebar content (will be injected into the sidebar) -->
 <div id="sidebarContent" style="display: none;">
-    {% call filter_section("filtersForm", '<span data-i18n="Node Filters">Node Filters</span>') %}
+    {% call filter_section("filtersForm", "Node Filters") %}
         <div class="row g-3">
             <div class="col-12">
-                <label for="search" class="form-label" data-i18n="Search">Search</label>
-                <input type="text" class="form-control form-control-sm" id="search" name="search" data-i18n-placeholder="Search by name, ID, or hardware...">
+                <label for="search" class="form-label">Search</label>
+                <input type="text" class="form-control form-control-sm" id="search" name="search" placeholder="Search by name, ID, or hardware...">
             </div>
             <div class="col-12">
-                <label for="role" class="form-label" data-i18n="Role">Role</label>
+                <label for="role" class="form-label">Role</label>
                 <select class="form-select form-select-sm" id="role" name="role">
-                    <option value="" data-i18n="All Roles">All Roles</option>
+                    <option value="">All Roles</option>
                     <!-- Options will be loaded dynamically -->
                 </select>
             </div>
             <div class="col-12">
-                <label for="hw_model" class="form-label" data-i18n="Hardware Model">Hardware Model</label>
+                <label for="hw_model" class="form-label">Hardware Model</label>
                 <select class="form-select form-select-sm" id="hw_model" name="hw_model">
-                    <option value="" data-i18n="All Hardware">All Hardware</option>
+                    <option value="">All Hardware</option>
                     <!-- Options will be loaded dynamically -->
                 </select>
             </div>
             <div class="col-12">
-                <label for="primary_channel" class="form-label" data-i18n="Primary Channel">Primary Channel</label>
+                <label for="primary_channel" class="form-label">Primary Channel</label>
                 <select class="form-select form-select-sm" id="primary_channel" name="primary_channel">
-                    <option value="" data-i18n="All Channels">All Channels</option>
+                    <option value="">All Channels</option>
                     <!-- Options will be loaded dynamically -->
                 </select>
             </div>
@@ -50,7 +50,7 @@
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="active_only" name="active_only" value="1">
                     <label class="form-check-label" for="active_only">
-                        <i class="bi bi-activity"></i> <span data-i18n="Active nodes only (24h)">Active nodes only (24h)</span>
+                        <i class="bi bi-activity"></i> Active nodes only (24h)
                     </label>
                 </div>
             </div>
@@ -58,7 +58,7 @@
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="named_only" name="named_only" value="1">
                     <label class="form-check-label" for="named_only">
-                        <i class="bi bi-tag"></i> <span data-i18n="Named nodes only">Named nodes only</span>
+                        <i class="bi bi-tag"></i> Named nodes only
                     </label>
                 </div>
             </div>
@@ -66,16 +66,16 @@
     {% endcall %}
 
     {% set table_controls = [
-        {"class": "btn-primary", "id": "applyFilters", "icon": "bi bi-search", "text": '<span data-i18n="Apply Filters">Apply Filters</span>', "type": "button"},
-        {"class": "btn-outline-secondary", "id": "clearFilters", "icon": "bi bi-x-circle", "text": '<span data-i18n="Clear Filters">Clear Filters</span>', "type": "button"},
-        {"class": "btn-outline-info", "id": "refreshTable", "icon": "bi bi-arrow-clockwise", "text": '<span data-i18n="Refresh">Refresh</span>', "type": "button"},
-        {"class": "btn-outline-success", "id": "shareFilters", "icon": "bi bi-share", "text": '<span data-i18n="Share">Share</span>', "type": "button"}
+        {"class": "btn-primary", "id": "applyFilters", "icon": "bi bi-search", "text": "Apply Filters", "type": "button"},
+        {"class": "btn-outline-secondary", "id": "clearFilters", "icon": "bi bi-x-circle", "text": "Clear Filters", "type": "button"},
+        {"class": "btn-outline-info", "id": "refreshTable", "icon": "bi bi-arrow-clockwise", "text": "Refresh", "type": "button"},
+        {"class": "btn-outline-success", "id": "shareFilters", "icon": "bi bi-share", "text": "Share", "type": "button"}
     ] %}
     {{ table_controls_section(table_controls) }}
 
     <!-- Legend Section -->
     <div class="sidebar-section">
-        <h6><i class="bi bi-palette"></i> <span data-i18n="Legend">Legend</span></h6>
+        <h6><i class="bi bi-palette"></i> Legend</h6>
         <div class="legend-content">
             <div class="legend-item">
                 <span class="badge bg-primary me-2">Client</span>
@@ -261,7 +261,7 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             {
                 key: 'node_name',
-                title: '<span data-i18n="Name">Name</span>',
+                title: 'Name',
                 sortable: true,
                 render: (value, row) => {
                     const displayName = value || 'Unnamed';
@@ -271,17 +271,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             },
             {
-                key: 'short_name',
-                title: '<span data-i18n="Short Name">Short Name</span>',
-                sortable: true,
-                render: (value, row) => {
-                    const displayName = value || 'N/A';
-                    return `<span title="Short name">${displayName}</span>`;
-                }
-            },
-            {
                 key: 'hw_model',
-                title: '<span data-i18n="Hardware">Hardware</span>',
+                title: 'Hardware',
                 sortable: true,
                 render: (value, row) => {
                     if (value && value !== 'Unknown') {
@@ -292,7 +283,7 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             {
                 key: 'role',
-                title: '<span data-i18n="Role">Role</span>',
+                title: 'Role',
                 sortable: true,
                 render: (value, row) => {
                     if (value && value !== 'Unknown') {
@@ -312,7 +303,7 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             {
                 key: 'last_packet_str',
-                title: '<span data-i18n="Last Seen">Last Seen</span>',
+                title: 'Last Seen',
                 sortable: true,
                 sortKey: 'last_packet_time',
                 render: (value, row) => {
@@ -324,7 +315,7 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             {
                 key: 'packet_count_24h',
-                title: '<span data-i18n="24h Activity">24h Activity</span>',
+                title: '24h Activity',
                 sortable: true,
                 render: (value, row) => {
                     const count = parseInt(value) || 0;
@@ -340,7 +331,7 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             {
                 key: 'primary_channel',
-                title: '<span data-i18n="Channel">Channel</span>',
+                title: 'Channel',
                 sortable: true,
                 render: (value) => {
                     return value ? `<span class="badge bg-secondary">${value}</span>` : '<span class="text-muted">Unknown</span>';
@@ -348,7 +339,7 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             {
                 key: 'node_id',
-                title: '<span data-i18n="Actions">Actions</span>',
+                title: 'Actions',
                 sortable: false,
                 render: (value, row) => {
                     // Create filtered URLs using the URL manager
@@ -362,15 +353,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     return `
                         <div class="btn-group" role="group">
                             <a href="/node/${value}"
-                               class="btn btn-sm btn-outline-primary" data-i18n-title="View node details" title="View node details">
+                               class="btn btn-sm btn-outline-primary" title="View node details">
                                 <i class="bi bi-info-circle"></i>
                             </a>
                             <a href="${packetsUrl}"
-                               class="btn btn-sm btn-outline-secondary" data-i18n-title="View packets from this node" title="View packets from this node">
+                               class="btn btn-sm btn-outline-secondary" title="View packets from this node">
                                 <i class="bi bi-envelope"></i>
                             </a>
                             <a href="${tracerouteUrl}"
-                               class="btn btn-sm btn-outline-info" data-i18n-title="View traceroutes from this node" title="View traceroutes from this node">
+                               class="btn btn-sm btn-outline-info" title="View traceroutes from this node">
                                 <i class="bi bi-diagram-3"></i>
                             </a>
                         </div>`;
